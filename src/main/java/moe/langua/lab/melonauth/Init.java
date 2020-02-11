@@ -29,6 +29,7 @@ public class Init extends JavaPlugin {
     private boolean isFreeze;
     private boolean isMute;
     private boolean hasUpdate = false;
+    private int forceVerifyRenameTimes = 2;
     private String latestVersion;
 
     private File authDataFile = new File(getDataFolder(), "auth.data");
@@ -65,6 +66,7 @@ public class Init extends JavaPlugin {
         isStrictMode = getConfig().getBoolean("StrictMode");
         isFreeze = getConfig().getBoolean("Freeze");
         isMute = getConfig().getBoolean("Mute");
+        forceVerifyRenameTimes = getConfig().getInt("ForceVerifyRenameTimes",2);
         Metrics metrics = new Metrics(this, 6472);
         loadLanguage(this.getConfig().getString("Language")); //load language settings
         authMap = loadAuthMap(); //load saved auth data
@@ -194,6 +196,7 @@ public class Init extends JavaPlugin {
         isStrictMode = getConfig().getBoolean("StrictMode");
         isFreeze = getConfig().getBoolean("Freeze");
         isMute = getConfig().getBoolean("Mute");
+        forceVerifyRenameTimes = getConfig().getInt("ForceVerifyRenameTimes",2);
         loadLanguage(this.getConfig().getString("Language"));
         autoSaveTask.cancel();
         int autoSaveTimeInSecond = getConfig().getInt("AutoSave");
@@ -216,6 +219,10 @@ public class Init extends JavaPlugin {
             stringBuilder.append(tmpString);
         }
         return new JSONObject(stringBuilder.toString());
+    }
+
+    public int getForceVerifyRenameTimes() {
+        return forceVerifyRenameTimes;
     }
 
     public ArrayList<Player> getWaitList() {

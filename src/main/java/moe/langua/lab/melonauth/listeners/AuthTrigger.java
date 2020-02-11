@@ -2,7 +2,11 @@ package moe.langua.lab.melonauth.listeners;
 
 import moe.langua.lab.melonauth.Init;
 import moe.langua.lab.melonauth.runnable.GetSkinImage;
+import moe.langua.lab.melonauth.utils.MojangAPI;
 import moe.langua.lab.melonauth.utils.Verifier;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -34,6 +38,10 @@ public class AuthTrigger implements Listener {
 
     @EventHandler
     public void onLogin(AsyncPlayerPreLoginEvent event) {
+        if(MojangAPI.getRenameTimes(event.getUniqueId()) > instance.getForceVerifyRenameTimes() && Bukkit.getOfflinePlayer(event.getUniqueId()).hasPlayedBefore()){
+            authMap.put(event.getUniqueId(), true);
+            return;
+        }
         if (instance.isStrictMode()) {
             if (!authMap.containsKey(event.getUniqueId())) {
                 authMap.put(event.getUniqueId(), true);
