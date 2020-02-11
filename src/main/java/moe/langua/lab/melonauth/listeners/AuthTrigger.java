@@ -20,6 +20,7 @@ import org.bukkit.event.player.*;
 import java.io.*;
 import java.net.URLEncoder;
 import java.util.*;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class AuthTrigger implements Listener {
     private Init instance;
@@ -66,7 +67,12 @@ public class AuthTrigger implements Listener {
         if (event.getPlayer().getGameMode() == GameMode.SURVIVAL) event.getPlayer().setGameMode(GameMode.SPECTATOR);
         instance.getWaitList().add(event.getPlayer());
         event.getPlayer().sendMessage(languageMap.get("join"));
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tellraw " + event.getPlayer().getName() + " " + instance.applyPlaceholder(languageMap.get("document.tellraw"), languageMap.get("document.notice"), languageMap.get("document.click_word"), languageMap.get("document.url"), languageMap.get("document.hover_notice")));
+        new BukkitRunnable(){
+            @Override
+            public void run() {
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tellraw " + event.getPlayer().getName() + " " + instance.applyPlaceholder(languageMap.get("document.tellraw"), languageMap.get("document.notice"), languageMap.get("document.click_word"), languageMap.get("document.url"), languageMap.get("document.hover_notice")));
+            }
+        }.runTaskLater(instance,25);
         new GetSkinImage(instance, languageMap, event.getPlayer()) {
             @Override
             public void run() {
